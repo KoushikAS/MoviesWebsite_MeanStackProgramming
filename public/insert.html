@@ -1,0 +1,94 @@
+<html>
+<head>
+	<script src="angular/angular.min.js"> </script>
+	<style>
+
+
+	body {
+	  margin: 0;
+	  font-family: Arial, Helvetica, sans-serif;
+	}
+
+	.topnav {
+	  overflow: hidden;
+	  background-color: #333;
+	}
+
+	.topnav a {
+	  float: left;
+	  color: #f2f2f2;
+	  text-align: center;
+	  padding: 14px 16px;
+	  text-decoration: none;
+	  font-size: 17px;
+	}
+
+	.topnav a:hover {
+	  background-color: #ddd;
+	  color: black;
+	}
+
+	.topnav a.active {
+	  background-color: #4CAF50;
+	  color: white;
+	}
+	</style>
+</head>
+<script> var myModule = angular.module("myApp",[])  </script>
+<body ng-app="myApp">
+	<h1> Film DataBase  </h1>
+	<div class="topnav">
+	<a href="/">Home</a>
+	<a  class="active" href="insert.html">Insert</a>
+	<a href="update.html">Update</a>
+	<a href="search.html">Search</a>
+	<a href="delete.html">Delete</a>
+	<a href="/display">Display</a>
+	</div>
+	<h3>
+    <form ng-controller='appController' ng-submit="send()">
+      <!--send() function from the controller is called on form submission -->
+
+		<label for="id" >Film ID: </label><br />
+            <input type="text" id="id" ng-model="data.id" /> <br />
+    <label for="name">Film Name</label><br />
+            <input type="text" id="name" ng-model="data.name" /> <br />
+
+		<label for="name">Film Ratings</label><br />
+						<input type="text" id="rate" ng-model="data.rate" /> <br />
+
+		<label for="name">Film Genre</label><br />
+						<input type="text" id="genre" ng-model="data.genre" /> <br /> <br />
+
+		<input type="submit" ng-click="Submit">
+
+       <div><pre>{{response.data}}</pre>  </div>
+    </form>
+</h3>
+
+     <script>
+	 myModule.controller ("appController",
+        function appController($scope, $http) {
+            /*$http directive is used to communicate to the server */
+            $scope.data = {}
+            $scope.response = {}
+
+            $scope.send = function () {
+                /*executed when submit is clicked*/
+				console.log($scope.data);
+                var posting = $http({
+                    method: 'POST',
+                    url: '/process_post',
+                    data: $scope.data,
+
+                }).then (function (response) {
+                    console.log(response);
+                    $scope.response.data = response.data;
+                },function (error){
+					console.log(error);
+			});
+            }
+        });
+    </script>
+</body>
+</html>
